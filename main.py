@@ -21,7 +21,7 @@ st.divider()
 
 tab_practice, tab_assignmemt1, tab_assignment2 = st.tabs(['실습', '과제1', '과제2'])
 
-if selected_day == '1일차 : 7울 6일(월)':
+if selected_day == '1일차 : 7월 6일(월)':
     with tab_practice:
         st.header('1일차 실습예제')
         st.title("나의 첫 번째 웹앱")
@@ -149,11 +149,114 @@ if selected_day == '1일차 : 7울 6일(월)':
 
         with tab_assignmemt1:
             st.header('1일차 실습과제1')
+            import random
+ 
+            st.set_page_config(page_title="나의 프로필 & 오늘의 명언", page_icon="✨", layout="wide")
+            
+            quotes = [
+                ("시작이 반이다.", "아리스토텔레스"),
+                ("천 리 길도 한 걸음부터.", "한국 속담"),
+                ("가장 큰 위험은 위험 없는 삶이다.", "작자 미상"),
+                ("오늘 할 수 있는 일을 내일로 미루지 마라.", "벤저민 프랭클린"),
+                ("실패는 성공으로 가는 과정일 뿐이다.", "토마스 에디슨"),
+                ("배움에 있어 늦은 때는 없다.", "작자 미상"),
+                ("작은 습관이 큰 변화를 만든다.", "제임스 클리어"),
+            ]
+            
+            if "quote_index" not in st.session_state:
+                st.session_state.quote_index = random.randrange(len(quotes))
+            
+            st.title("나의 프로필 & 오늘의 명언")
+            st.write("")
+            
+            col_profile, col_quote = st.columns(2)
+            
+            with col_profile:
+                st.header("내 프로필")
+                st.subheader("최동진")
+                st.write("고등학교 1학년, 미래의 전기 기계 공학자")
+                st.write("관심사: 게임, 음악, 축구, 강새연")
+                st.info("위 이름과 소개, 관심사를 자기 것으로 바꿔보세요.")
+            
+            with col_quote:
+                st.header("오늘의 명언")
+                quote_text, quote_author = quotes[st.session_state.quote_index]
+                st.success(quote_text)
+                st.write(f"말한 사람: {quote_author}")
+            
+                if st.button("다른 명언 보기"):
+                    st.session_state.quote_index = random.randrange(len(quotes))
+                    st.rerun()
             
         with tab_assignment2:
             st.header('1일차 실습과제2')
+            st.set_page_config(page_title="BMI 계산기", page_icon="⚖️", layout="wide")
+ 
+            st.title("BMI 계산기")
+            st.write("키와 몸무게를 입력하고 버튼을 눌러 체질량지수(BMI)를 확인해보세요.")
+            st.divider()
+            
+            col_input, col_result = st.columns(2)
+            
+            with col_input:
+                st.header("정보 입력")
+                height_cm = st.slider("키 (cm)", min_value=100, max_value=220, value=165)
+                weight_kg = st.slider("몸무게 (kg)", min_value=30, max_value=150, value=55)
+                calculate = st.button("BMI 계산하기")
+            
+            with col_result:
+                st.header("결과")
+            
+                if calculate:
+                    height_m = height_cm / 100
+                    bmi = weight_kg / (height_m ** 2)
+            
+                    # 대한비만학회(KSSO) 기준: 저체중 <18.5 / 정상 18.5~22.9 / 과체중 23~24.9 / 비만 25 이상
+                    if bmi < 18.5:
+                        category = "저체중"
+                    elif bmi < 23:
+                        category = "정상 체중"
+                    elif bmi < 25:
+                        category = "과체중"
+                    else:
+                        category = "비만"
+            
+                    st.metric(label="나의 BMI", value=f"{bmi:.1f}", delta=category, delta_color="off")
+            
+                    # BMI 값을 0.0~1.0 사이 진행률로 환산 (15~35 범위를 기준으로)
+                    scale_min, scale_max = 15, 35
+                    progress_value = max(0.0, min(1.0, (bmi - scale_min) / (scale_max - scale_min)))
+                    st.progress(progress_value, text=f"저체중 ← BMI {bmi:.1f} → 비만")
+            
+                    if category == "저체중":
+                        st.info("표준 체중보다 가벼운 편입니다. 균형 잡힌 식사가 도움이 될 수 있어요.")
+                    elif category == "정상 체중":
+                        st.success("건강한 범위의 체중입니다. 지금처럼 잘 유지해보세요.")
+                    elif category == "과체중":
+                        st.warning("표준보다 조금 높은 편입니다. 꾸준한 활동이 도움이 될 수 있어요.")
+                    else:
+                        st.error("전문가와 상담을 통해 건강 관리 계획을 세워보는 것을 권장합니다.")
+            
+                    st.caption(
+                        "이 결과는 대한비만학회 성인 기준을 적용한 참고용 계산입니다. "
+                        "성장기 청소년은 나이·성별별 성장도표(퍼센타일)를 함께 보는 것이 더 정확합니다."
+                    )
+                else:
+                    st.info("왼쪽에서 키와 몸무게를 입력하고 'BMI 계산하기' 버튼을 눌러주세요.")
 
-elif selected_day == '1일차 : 7울 7일(화)':
+elif selected_day == '1일차 : 7월 7일(화)':
+    with tab_practice:
+        st.header('1일차 실습예제')
+
+        with tab_assignmemt1:
+            st.header('1일차 실습과제1')
+            
+        
+        with tab_assignment2:
+            st.header('1일차 실습과제2')
+
+             
+elif selected_day == '1일차 : 7월 8일(수)':
     with tab_practice:
         st.header('1일차 실습예제')
 
@@ -163,7 +266,7 @@ elif selected_day == '1일차 : 7울 7일(화)':
         with tab_assignment2:
             st.header('1일차 실습과제2')
 
-elif selected_day == '1일차 : 7울 8일(수)':
+elif selected_day == '1일차 : 7월 9일(목)':
     with tab_practice:
         st.header('1일차 실습예제')
 
@@ -172,17 +275,7 @@ elif selected_day == '1일차 : 7울 8일(수)':
             
         with tab_assignment2:
             st.header('1일차 실습과제2')
-
-elif selected_day == '1일차 : 7울 9일(목)':
-    with tab_practice:
-        st.header('1일차 실습예제')
-
-        with tab_assignmemt1:
-            st.header('1일차 실습과제1')
-            
-        with tab_assignment2:
-            st.header('1일차 실습과제2')
-elif selected_day == '1일차 : 7울 10일(금)':
+elif selected_day == '1일차 : 7월 10일(금)':
     with tab_practice:
         st.header('1일차 실습예제')
 
